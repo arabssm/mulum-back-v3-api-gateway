@@ -1,0 +1,31 @@
+
+# Gradle
+.gradle
+build/
+!build/libs/
+!build/distributions/
+!build/reports/
+!build/test-results/
+!build/classes/
+
+# IntelliJ
+.idea/
+*.iml
+*.iws
+
+# macOS
+.DS_Store
+
+# Logs
+logs
+*.log
+
+# Other
+out/
+
+.env
+gradlew
+gradlew.bat
+
+*.jar
+gradle/
