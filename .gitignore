@@ -6,6 +6,7 @@ build/
 !build/reports/
 !build/test-results/
 !build/classes/
+bin/
 
 # IntelliJ IDEA
 .idea/
@@ -36,4 +37,3 @@ out/
 *.bak
 *.swp
 *~
-
