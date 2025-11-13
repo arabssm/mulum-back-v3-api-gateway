@@ -1,6 +1,5 @@
-
 # Gradle
-.gradle
+.gradle/
 build/
 !build/libs/
 !build/distributions/
@@ -8,7 +7,7 @@ build/
 !build/test-results/
 !build/classes/
 
-# IntelliJ
+# IntelliJ IDEA
 .idea/
 *.iml
 *.iws
@@ -16,16 +15,25 @@ build/
 # macOS
 .DS_Store
 
-# Logs
-logs
+# 로그
+logs/
 *.log
 
-# Other
-out/
-
+# 환경변수 파일 (중요!)
 .env
+.env.production
+.env.local
+.env.*.local
+
+# Gradle Wrapper
 gradlew
 gradlew.bat
-
-*.jar
 gradle/
+*.jar
+
+# 기타
+out/
+*.bak
+*.swp
+*~
+
