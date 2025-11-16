@@ -75,7 +75,7 @@ class AuthorizationFilter(
             UserRole.STUDENT -> userRole?.lowercase() == "student" || userRole?.lowercase() == "std"
             UserRole.TEACHER -> userRole?.lowercase() == "teacher" || userRole?.lowercase() == "tch"
             UserRole.BOTH -> true
-            UserRole.ANONYMOUS -> true
+            else -> true
         }
 
         if (!authorized) {
@@ -85,7 +85,37 @@ class AuthorizationFilter(
         }
 
         log.info("인가 성공")
-        return chain.filter(exchange)
+
+        // 토큰 클레임에서 사용자 정보와 팀 ID를 추출해 요청 헤더에 주입합니다.
+        val claims = jwtUtil.getClaims(token)
+        val user = try {
+            claims?.get("user", String::class.java)
+                ?: claims?.subject
+                ?: claims?.get("username", String::class.java)
+        } catch (_: Exception) {
+            null
+        }
+
+        val teamId = try {
+            claims?.get("teamId", String::class.java)
+                ?: claims?.get("team_id", String::class.java)
+                ?: claims?.get("team", String::class.java)
+        } catch (_: Exception) {
+            null
+        }
+
+        // X-User, X-Team-Id 헤더를 추가합니다. teamId가 없으면 헤더를 추가하지 않습니다.
+        val requestBuilder = exchange.request.mutate()
+            .header("X-User", user ?: "unknown")
+
+        if (teamId != null) {
+            requestBuilder.header("X-Team-Id", teamId)
+        }
+
+        val mutatedRequest = requestBuilder.build()
+
+        val mutatedExchange = exchange.mutate().request(mutatedRequest).build()
+        return chain.filter(mutatedExchange)
     }
 
     override fun getOrder(): Int {
