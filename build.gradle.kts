@@ -28,6 +28,7 @@ dependencies {
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     implementation("io.jsonwebtoken:jjwt-api:0.12.3")
+    implementation("io.github.cdimascio:dotenv-kotlin:6.4.1")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.12.3")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.12.3")
     testImplementation("org.springframework.boot:spring-boot-starter-test")

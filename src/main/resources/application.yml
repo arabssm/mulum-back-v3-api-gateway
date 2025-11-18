@@ -87,6 +87,70 @@ spring:
           filters:
             - RewritePath=/teamspaces/(?<segment>.*), /teamspaces/${segment}
 
+        # 권한이 있는 room-service 라우트 (std/tch)
+        - id: room-service-with-auth
+          uri: ${ROOM_SERVICE_URL}
+          predicates:
+            - Path=/std/rooms/**,/tch/rooms/**,/ara/rooms/**
+          filters:
+            - RewritePath=/(?<role>std|tch|ara)/rooms/(?<segment>.*), /rooms/${segment}
+
+        # 권한이 없는 room-service 라우트 (학생+교사)
+        - id: room-service-no-auth
+          uri: ${ROOM_SERVICE_URL}
+          predicates:
+            - Path=/rooms/**
+          filters:
+            - RewritePath=/rooms/(?<segment>.*), /rooms/${segment}
+
+        # 권한이 있는 notice-service 라우트 (std/tch)
+        - id: notice-service-with-auth
+          uri: ${NOTICE_SERVICE_URL}
+          predicates:
+            - Path=/std/notices/**,/tch/notices/**,/ara/notices/**
+          filters:
+            - RewritePath=/(?<role>std|tch|ara)/notices/(?<segment>.*), /notices/${segment}
+
+        # 권한이 없는 notice-service 라우트 (학생+교사)
+        - id: notice-service-no-auth
+          uri: ${NOTICE_SERVICE_URL}
+          predicates:
+            - Path=/notices/**
+          filters:
+            - RewritePath=/notices/(?<segment>.*), /notices/${segment}
+
+        # 권한이 있는 report-service 라우트 (std/tch)
+        - id: report-service-with-auth
+          uri: ${REPORT_SERVICE_URL}
+          predicates:
+            - Path=/std/reports/**,/tch/reports/**,/ara/reports/**
+          filters:
+            - RewritePath=/(?<role>std|tch|ara)/reports/(?<segment>.*), /reports/${segment}
+
+        # 권한이 없는 report-service 라우트 (학생+교사)
+        - id: report-service-no-auth
+          uri: ${REPORT_SERVICE_URL}
+          predicates:
+            - Path=/reports/**
+          filters:
+            - RewritePath=/reports/(?<segment>.*), /reports/${segment}
+
+        # 권한이 있는 s3-service 라우트 (std/tch)
+        - id: s3-service-with-auth
+          uri: ${S3_SERVICE_URL}
+          predicates:
+            - Path=/std/s3/**,/tch/s3/**,/ara/s3/**
+          filters:
+            - RewritePath=/(?<role>std|tch|ara)/s3/(?<segment>.*), /s3/${segment}
+
+        # 권한이 없는 s3-service 라우트 (학생+교사)
+        - id: s3-service-no-auth
+          uri: ${S3_SERVICE_URL}
+          predicates:
+            - Path=/s3/**
+          filters:
+            - RewritePath=/s3/(?<segment>.*), /s3/${segment}
+
 management:
   endpoints:
     web:
