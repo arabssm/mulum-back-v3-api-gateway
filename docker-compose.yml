@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    ports:
+      - "${SERVER_PORT:-8080}:8080"
+    environment:
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - SERVER_PORT=${SERVER_PORT:-8080}
+      - USER_SERVICE_URL=${USER_SERVICE_URL}
+      - ITEM_SERVICE_URL=${ITEM_SERVICE_URL}
+      - AUTH_SERVICE_URL=${AUTH_SERVICE_URL}
+      - CALENDAR_SERVICE_URL=${CALENDAR_SERVICE_URL}
+      - TEAM_SERVICE_URL=${TEAM_SERVICE_URL}
+      - ROOM_SERVICE_URL=${ROOM_SERVICE_URL}
+      - NOTICE_SERVICE_URL=${NOTICE_SERVICE_URL}
+      - REPORT_SERVICE_URL=${REPORT_SERVICE_URL}
+      - S3_SERVICE_URL=${S3_SERVICE_URL}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    env_file:
+      - .env
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    networks:
+      - muldum-network
+
+networks:
+  muldum-network:
+    driver: bridge
+
