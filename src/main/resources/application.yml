@@ -8,148 +8,220 @@ spring:
     gateway:
       routes:
         # 권한이 있는 user-service 라우트 (std/tch)
-        - id: user-service-with-auth
+        - id: user-service-with-auth-prefixed
           uri: ${USER_SERVICE_URL}
           predicates:
-            - Path=/std/users/**,/tch/users/**,/ara/users/**
+            - Path=/std/users/**,/tch/users/**
           filters:
-            - RewritePath=/(?<role>std|tch|ara)/users/(?<segment>.*), /users/${segment}
+            - RewritePath=/(?<role>std|tch)/users/(?<segment>.*), /users/${segment}
 
-        # 권한이 없는 user-service 라우트 (학생+교사)
-        - id: user-service-no-auth
+        # 권한이 있는 user-service 라우트 (unprefixed -> requires auth)
+        - id: user-service-with-auth
           uri: ${USER_SERVICE_URL}
           predicates:
             - Path=/users/**
           filters:
             - RewritePath=/users/(?<segment>.*), /users/${segment}
 
+        # 권한이 없는 user-service 라우트 for ARA (preserve /ara prefix)
+        - id: user-service-ara-no-auth
+          uri: ${USER_SERVICE_URL}
+          predicates:
+            - Path=/ara/users/**
+          filters:
+            - RewritePath=/ara/users/(?<segment>.*), /ara/users/${segment}
+
         # 권한이 있는 item-service 라우트 (std/tch)
-        - id: item-service-with-auth
+        - id: item-service-with-auth-prefixed
           uri: ${ITEM_SERVICE_URL}
           predicates:
-            - Path=/std/items/**,/tch/items/**,/ara/items/**
+            - Path=/std/items/**,/tch/items/**
           filters:
-            - RewritePath=/(?<role>std|tch|ara)/items/(?<segment>.*), /items/${segment}
+            - RewritePath=/(?<role>std|tch)/items/(?<segment>.*), /items/${segment}
 
-        # 권한이 없는 item-service 라우트 (학생+교사)
-        - id: item-service-no-auth
+        # 권한이 있는 item-service 라우트 (unprefixed -> requires auth)
+        - id: item-service-with-auth
           uri: ${ITEM_SERVICE_URL}
           predicates:
             - Path=/items/**
           filters:
             - RewritePath=/items/(?<segment>.*), /items/${segment}
 
-        # 권한이 있는 auth-service 라우트 (std/tch/ara)
-        - id: auth-service-with-auth
+        # 권한이 없는 item-service 라우트 for ARA (preserve /ara prefix)
+        - id: item-service-ara-no-auth
+          uri: ${ITEM_SERVICE_URL}
+          predicates:
+            - Path=/ara/items/**
+          filters:
+            - RewritePath=/ara/items/(?<segment>.*), /ara/items/${segment}
+
+        # 권한이 있는 auth-service 라우트 (std/tch)
+        - id: auth-service-with-auth-prefixed
           uri: ${AUTH_SERVICE_URL}
           predicates:
-            - Path=/std/auth/**,/tch/auth/**,/ara/auth/**
+            - Path=/std/auth/**,/tch/auth/**
           filters:
-            - RewritePath=/(?<role>std|tch|ara)/auth/(?<segment>.*), /auth/${segment}
+            - RewritePath=/(?<role>std|tch)/auth/(?<segment>.*), /auth/${segment}
 
-        # 권한이 없는 auth-service 라우트 (학생+교사)
-        - id: auth-service-no-auth
+        # 권한이 있는 auth-service 라우트 (unprefixed -> requires auth)
+        - id: auth-service-with-auth
           uri: ${AUTH_SERVICE_URL}
           predicates:
             - Path=/auth/**
           filters:
             - RewritePath=/auth/(?<segment>.*), /auth/${segment}
 
+        # 권한이 없는 auth-service 라우트 for ARA (preserve /ara prefix)
+        - id: auth-service-ara-no-auth
+          uri: ${AUTH_SERVICE_URL}
+          predicates:
+            - Path=/ara/auth/**
+          filters:
+            - RewritePath=/ara/auth/(?<segment>.*), /ara/auth/${segment}
+
         # 권한이 있는 calendar-service 라우트 (std/tch)
-        - id: calendar-service-with-auth
+        - id: calendar-service-with-auth-prefixed
           uri: ${CALENDAR_SERVICE_URL}
           predicates:
-            - Path=/std/calendars/**,/tch/calendars/**,/ara/calendars/**
+            - Path=/std/calendars/**,/tch/calendars/**
           filters:
-            - RewritePath=/(?<role>std|tch|ara)/calendars/(?<segment>.*), /calendars/${segment}
+            - RewritePath=/(?<role>std|tch)/calendars/(?<segment>.*), /calendars/${segment}
 
-        # 권한이 없는 calendar-service 라우트 (학생+교사)
-        - id: calendar-service-no-auth
+        # 권한이 있는 calendar-service 라우트 (unprefixed -> requires auth)
+        - id: calendar-service-with-auth
           uri: ${CALENDAR_SERVICE_URL}
           predicates:
             - Path=/calendars/**
           filters:
             - RewritePath=/calendars/(?<segment>.*), /calendars/${segment}
 
+        # 권한이 없는 calendar-service 라우트 for ARA (preserve /ara prefix)
+        - id: calendar-service-ara-no-auth
+          uri: ${CALENDAR_SERVICE_URL}
+          predicates:
+            - Path=/ara/calendars/**
+          filters:
+            - RewritePath=/ara/calendars/(?<segment>.*), /ara/calendars/${segment}
+
         # 권한이 있는 team-service 라우트 (std/tch)
-        - id: team-service-with-auth
+        - id: team-service-with-auth-prefixed
           uri: ${TEAM_SERVICE_URL}
           predicates:
-            - Path=/std/teamspaces/**,/tch/teamspaces/**,/ara/teamspaces/**
+            - Path=/std/teamspaces/**,/tch/teamspaces/**
           filters:
-            - RewritePath=/(?<role>std|tch|ara)/teamspaces/(?<segment>.*), /teamspaces/${segment}
+            - RewritePath=/(?<role>std|tch)/teamspaces/(?<segment>.*), /teamspaces/${segment}
 
-        # 권한이 없는 team-service 라우트 (학생+교사)
-        - id: team-service-no-auth
+        # 권한이 있는 team-service 라우트 (unprefixed -> requires auth)
+        - id: team-service-with-auth
           uri: ${TEAM_SERVICE_URL}
           predicates:
             - Path=/teamspaces/**
           filters:
             - RewritePath=/teamspaces/(?<segment>.*), /teamspaces/${segment}
 
+        # 권한이 없는 team-service 라우트 for ARA (preserve /ara prefix)
+        - id: team-service-ara-no-auth
+          uri: ${TEAM_SERVICE_URL}
+          predicates:
+            - Path=/ara/teamspaces/**
+          filters:
+            - RewritePath=/ara/teamspaces/(?<segment>.*), /ara/teamspaces/${segment}
+
         # 권한이 있는 room-service 라우트 (std/tch)
-        - id: room-service-with-auth
+        - id: room-service-with-auth-prefixed
           uri: ${ROOM_SERVICE_URL}
           predicates:
-            - Path=/std/rooms/**,/tch/rooms/**,/ara/rooms/**
+            - Path=/std/rooms/**,/tch/rooms/**
           filters:
-            - RewritePath=/(?<role>std|tch|ara)/rooms/(?<segment>.*), /rooms/${segment}
+            - RewritePath=/(?<role>std|tch)/rooms/(?<segment>.*), /rooms/${segment}
 
-        # 권한이 없는 room-service 라우트 (학생+교사)
-        - id: room-service-no-auth
+        # 권한이 있는 room-service 라우트 (unprefixed -> requires auth)
+        - id: room-service-with-auth
           uri: ${ROOM_SERVICE_URL}
           predicates:
             - Path=/rooms/**
           filters:
             - RewritePath=/rooms/(?<segment>.*), /rooms/${segment}
 
+        # 권한이 없는 room-service 라우트 for ARA (preserve /ara prefix)
+        - id: room-service-ara-no-auth
+          uri: ${ROOM_SERVICE_URL}
+          predicates:
+            - Path=/ara/rooms/**
+          filters:
+            - RewritePath=/ara/rooms/(?<segment>.*), /ara/rooms/${segment}
+
         # 권한이 있는 notice-service 라우트 (std/tch)
-        - id: notice-service-with-auth
+        - id: notice-service-with-auth-prefixed
           uri: ${NOTICE_SERVICE_URL}
           predicates:
-            - Path=/std/notices/**,/tch/notices/**,/ara/notices/**
+            - Path=/std/notices/**,/tch/notices/**
           filters:
-            - RewritePath=/(?<role>std|tch|ara)/notices/(?<segment>.*), /notices/${segment}
+            - RewritePath=/(?<role>std|tch)/notices/(?<segment>.*), /notices/${segment}
 
-        # 권한이 없는 notice-service 라우트 (학생+교사)
-        - id: notice-service-no-auth
+        # 권한이 있는 notice-service 라우트 (unprefixed -> requires auth)
+        - id: notice-service-with-auth
           uri: ${NOTICE_SERVICE_URL}
           predicates:
             - Path=/notices/**
           filters:
             - RewritePath=/notices/(?<segment>.*), /notices/${segment}
 
+        # 권한이 없는 notice-service 라우트 for ARA (preserve /ara prefix)
+        - id: notice-service-ara-no-auth
+          uri: ${NOTICE_SERVICE_URL}
+          predicates:
+            - Path=/ara/notices/**
+          filters:
+            - RewritePath=/ara/notices/(?<segment>.*), /ara/notices/${segment}
+
         # 권한이 있는 report-service 라우트 (std/tch)
-        - id: report-service-with-auth
+        - id: report-service-with-auth-prefixed
           uri: ${REPORT_SERVICE_URL}
           predicates:
-            - Path=/std/reports/**,/tch/reports/**,/ara/reports/**
+            - Path=/std/reports/**,/tch/reports/**
           filters:
-            - RewritePath=/(?<role>std|tch|ara)/reports/(?<segment>.*), /reports/${segment}
+            - RewritePath=/(?<role>std|tch)/reports/(?<segment>.*), /reports/${segment}
 
-        # 권한이 없는 report-service 라우트 (학생+교사)
-        - id: report-service-no-auth
+        # 권한이 있는 report-service 라우트 (unprefixed -> requires auth)
+        - id: report-service-with-auth
           uri: ${REPORT_SERVICE_URL}
           predicates:
             - Path=/reports/**
           filters:
             - RewritePath=/reports/(?<segment>.*), /reports/${segment}
 
+        # 권한이 없는 report-service 라우트 for ARA (preserve /ara prefix)
+        - id: report-service-ara-no-auth
+          uri: ${REPORT_SERVICE_URL}
+          predicates:
+            - Path=/ara/reports/**
+          filters:
+            - RewritePath=/ara/reports/(?<segment>.*), /ara/reports/${segment}
+
         # 권한이 있는 s3-service 라우트 (std/tch)
-        - id: s3-service-with-auth
+        - id: s3-service-with-auth-prefixed
           uri: ${S3_SERVICE_URL}
           predicates:
-            - Path=/std/s3/**,/tch/s3/**,/ara/s3/**
+            - Path=/std/s3/**,/tch/s3/**
           filters:
-            - RewritePath=/(?<role>std|tch|ara)/s3/(?<segment>.*), /s3/${segment}
+            - RewritePath=/(?<role>std|tch)/s3/(?<segment>.*), /s3/${segment}
 
-        # 권한이 없는 s3-service 라우트 (학생+교사)
-        - id: s3-service-no-auth
+        # 권한이 있는 s3-service 라우트 (unprefixed -> requires auth)
+        - id: s3-service-with-auth
           uri: ${S3_SERVICE_URL}
           predicates:
             - Path=/s3/**
           filters:
             - RewritePath=/s3/(?<segment>.*), /s3/${segment}
+
+        # 권한이 없는 s3-service 라우트 for ARA (preserve /ara prefix)
+        - id: s3-service-ara-no-auth
+          uri: ${S3_SERVICE_URL}
+          predicates:
+            - Path=/ara/s3/**
+          filters:
+            - RewritePath=/ara/s3/(?<segment>.*), /ara/s3/${segment}
 
 management:
   endpoints:

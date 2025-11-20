@@ -42,7 +42,7 @@ class AuthorizationFilter(
             STUDENT_PREFIX -> UserRole.STUDENT
             TEACHER_PREFIX -> UserRole.TEACHER
             ANONYMOUS_PREFIX -> UserRole.ANONYMOUS
-            else -> UserRole.BOTH
+            else -> UserRole.STUDENT_OR_TEACHER
         }
 
         log.info("필요한 권한: {}", requiredRole)
@@ -74,7 +74,10 @@ class AuthorizationFilter(
         val authorized = when (requiredRole) {
             UserRole.STUDENT -> userRole?.lowercase() == "student" || userRole?.lowercase() == "std"
             UserRole.TEACHER -> userRole?.lowercase() == "teacher" || userRole?.lowercase() == "tch"
-            UserRole.BOTH -> true
+            UserRole.STUDENT_OR_TEACHER -> {
+                val r = userRole?.lowercase()
+                r == "student" || r == "std" || r == "teacher" || r == "tch"
+            }
             else -> true
         }
 
@@ -106,7 +109,7 @@ class AuthorizationFilter(
 
         // X-User, X-Team-Id 헤더를 추가합니다. teamId가 없으면 헤더를 추가하지 않습니다.
         val requestBuilder = exchange.request.mutate()
-            .header("X-User", user ?: "unknown")
+            .header("X-User-Id", user ?: "unknown")
 
         if (teamId != null) {
             requestBuilder.header("X-Team-Id", teamId)
